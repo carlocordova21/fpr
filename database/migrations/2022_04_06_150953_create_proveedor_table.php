@@ -19,7 +19,7 @@ class CreateProveedorTable extends Migration
             $table->string('razon_social');
             $table->unsignedBigInteger('rubro_proveedor_id');
             $table->text('descripcion');
-            $table->boolean('estado');
+            $table->boolean('estado')->default(0);
             $table->timestamps();
 
             $table->foreign('rubro_proveedor_id')->references('id')->on('rubro_proveedor')->onDelete('cascade');

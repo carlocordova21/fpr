@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
+use App\Models\Proveedor;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
-class UserController extends Controller
+class ProveedorController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,7 +15,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        return response()->json(User::all());
+        return response()->json(Proveedor::all());
     }
 
     /**
@@ -25,15 +26,24 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
+        $validator = Validator::make($request->all, [
+            'ruc' => 'required|unique:proveedor|size:11'
+        ]);
+
+        if($validator->fails()) {
+            return response()->json($validator->errors());
+        }
+        
+        return response()->json(Proveedor::create($request->all()));
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\User  $user
+     * @param  \App\Models\Proveedor  $proveedor
      * @return \Illuminate\Http\Response
      */
-    public function show(User $user)
+    public function show(Proveedor $proveedor)
     {
         //
     }
@@ -42,10 +52,10 @@ class UserController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\User  $user
+     * @param  \App\Models\Proveedor  $proveedor
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, User $user)
+    public function update(Request $request, Proveedor $proveedor)
     {
         //
     }
@@ -53,10 +63,10 @@ class UserController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\User  $user
+     * @param  \App\Models\Proveedor  $proveedor
      * @return \Illuminate\Http\Response
      */
-    public function destroy(User $user)
+    public function destroy(Proveedor $proveedor)
     {
         //
     }
