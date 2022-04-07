@@ -8,6 +8,23 @@ use Illuminate\Support\Facades\Validator;
 
 class ProveedorController extends Controller
 {
+    public function enviarSolicitud(Request $request) {
+        $validator = Validator::make($request->all(), [
+            'ruc' => 'required|unique:proveedor|size:11',
+            'razon_social' => 'string|max:150',
+            'rubro_proveedor_id' => 'required|exists:rubro_proveedor,id',
+            'descripcion' => 'required|alpha_dash|max:300',
+            'estado' => 'boolean'
+        ]);
+
+        if($validator->fails()) {
+            return response()->json($validator->errors());
+        }
+
+        $validated = $validator->validated();
+        return response()->json(Proveedor::create($validated));
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -24,17 +41,9 @@ class ProveedorController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function aprobarSolicitud(Request $request, Proveedor $proveedor)
     {
-        $validator = Validator::make($request->all, [
-            'ruc' => 'required|unique:proveedor|size:11'
-        ]);
-
-        if($validator->fails()) {
-            return response()->json($validator->errors());
-        }
-        
-        return response()->json(Proveedor::create($request->all()));
+        $proveedor->update(["estado" => 1]);
     }
 
     /**

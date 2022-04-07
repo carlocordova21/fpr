@@ -16,7 +16,6 @@ class CreateRubroProveedorTable extends Migration
         Schema::create('rubro_proveedor', function (Blueprint $table) {
             $table->id();
             $table->string('nombre');
-            $table->timestamps();
         });
     }
 

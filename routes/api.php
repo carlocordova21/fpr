@@ -23,4 +23,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::apiResource('/users', UserController::class);
 
 Route::get('/proveedores', [ProveedorController::class, 'index']);
-Route::post('/proveedor', [ProveedorController::class, 'store']);
+Route::post('/proveedor_solicitud', [ProveedorController::class, 'enviarSolicitud']);
+Route::put('/proveedor_aprobado/{proveedor}', [ProveedorController::class, 'aprobarSolicitud']);
+Route::delete('/proveedor/{proveedor}', [ProveedorController::class, 'destroy']);
+
