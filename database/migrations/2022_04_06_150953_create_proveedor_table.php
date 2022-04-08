@@ -17,6 +17,8 @@ class CreateProveedorTable extends Migration
             $table->id();
             $table->char('ruc', 11);
             $table->string('razon_social');
+            $table->string('email')->unique();
+            $table->timestamp('email_verified_at')->nullable();
             $table->unsignedBigInteger('rubro_proveedor_id');
             $table->text('descripcion');
             $table->boolean('estado')->default(0);
