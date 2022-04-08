@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Proveedor;
 use App\Models\User;
+use App\Models\UsuarioProveedor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
@@ -15,7 +16,6 @@ class ProveedorController extends Controller
             'ruc' => 'required|unique:proveedor|size:11',
             'razon_social' => 'string|max:150',
             'email' => 'required|email',
-            'email_verified_at' => now(),
             'rubro_proveedor_id' => 'required|exists:rubro_proveedor,id',
             'descripcion' => 'required|alpha_dash|max:300',
             'estado' => 'boolean'
@@ -51,7 +51,12 @@ class ProveedorController extends Controller
             // $proveedor->estado = 1;
             // $proveedor->save();
 
-            return $this->generarUsuario($proveedor);
+            $user = $this->generarUsuario($proveedor);
+
+            UsuarioProveedor::create([
+                'usuario_id' => $user->id,
+                'proveedor_id' => $proveedor->id
+            ]);
         }
         return 'El usuario fue generado';
     }
@@ -60,12 +65,16 @@ class ProveedorController extends Controller
         $bytes = openssl_random_pseudo_bytes(4);
         $pass = bin2hex($bytes);
 
-        return User::create([
+        $user = new User();
+        $user->create([
             'name' => $proveedor->razon_social,
             'password' => $pass,
             'tipo_usuario_id' => 2,
             'remember_token' => Str::random(10)
         ]);
+        $user->save();
+
+        return $user;
     }
 
     /**
