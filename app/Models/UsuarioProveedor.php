@@ -10,5 +10,5 @@ class UsuarioProveedor extends Model
     use HasFactory;
     protected $table = 'usuario_proveedor';
     protected $fillable = ['usuario_id', 'proveedor_id'];
-    protected $timestamps = false;
+    public $timestamps = false;
 }

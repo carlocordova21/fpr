@@ -7,7 +7,6 @@ use App\Models\User;
 use App\Models\UsuarioProveedor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Str;
 
 class ProveedorController extends Controller
 {
@@ -26,7 +25,7 @@ class ProveedorController extends Controller
         }
 
         $validated = $validator->validated();
-        return response()->json(Proveedor::create($validated));
+        return response()->json(Proveedor::create($validated), 201);
     }
 
     /**
@@ -48,8 +47,8 @@ class ProveedorController extends Controller
     public function aprobarSolicitud(Request $request, Proveedor $proveedor)
     {
         if($proveedor->estado == 0) {
-            // $proveedor->estado = 1;
-            // $proveedor->save();
+            $proveedor->estado = 1;
+            $proveedor->save();
 
             $user = $this->generarUsuario($proveedor);
 
@@ -57,22 +56,21 @@ class ProveedorController extends Controller
                 'usuario_id' => $user->id,
                 'proveedor_id' => $proveedor->id
             ]);
+
+            return 'Nuevo usuario registrado';
         }
-        return 'El usuario fue generado';
+        return 'La solicitud del usuario ya fue aprobada';
     }
 
     private function generarUsuario($proveedor) {
-        $bytes = openssl_random_pseudo_bytes(4);
+        $bytes = openssl_random_pseudo_bytes(6);
         $pass = bin2hex($bytes);
 
-        $user = new User();
-        $user->create([
+        $user = User::create([
             'name' => $proveedor->razon_social,
             'password' => $pass,
             'tipo_usuario_id' => 2,
-            'remember_token' => Str::random(10)
         ]);
-        $user->save();
 
         return $user;
     }
