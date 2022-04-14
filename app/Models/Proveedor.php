@@ -11,19 +11,11 @@ class Proveedor extends Model
     use HasFactory;
     protected $table = 'proveedor';
     protected $fillable = [
+        'user_id',
         'ruc', 
         'razon_social',
-        'email', 
         'rubro_proveedor_id', 
-        'descripcion'
+        'descripcion',
     ];
-
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-    ];
+    
 }

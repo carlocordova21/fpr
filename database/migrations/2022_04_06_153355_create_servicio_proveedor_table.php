@@ -16,7 +16,7 @@ class CreateServicioProveedorTable extends Migration
         Schema::create('servicio_proveedor', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('proveedor_id');
-            $table->string('descripcion');
+            $table->string('descripcion')->unique();
             $table->decimal('precio_base', 8, 2);
             $table->string('descripcion_adicional');
             $table->decimal('precio_adicional', 8, 2);

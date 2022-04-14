@@ -17,7 +17,7 @@ class CreateVentaTable extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('servicio_proveedor_id');
-            $table->boolean('estado');
+            $table->boolean('estado')->default(0);
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users');
