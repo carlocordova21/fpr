@@ -4,19 +4,19 @@ namespace App\Http\Controllers;
 
 use App\Models\Proveedor;
 use App\Models\User;
-use App\Models\UsuarioProveedor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
 class ProveedorController extends Controller
 {
-    public function enviarSolicitud(Request $request) {
-        $validator = Validator::make($request->all(), [
+    public function enviarSolicitud(Request $request, User $user) {
+        $validator = Validator::make(
+            array_merge($request->all(), ['user_id' => $user->id]), [
+            'user_id' => 'required|exists:users,id|unique:proveedor,user_id',
             'ruc' => 'required|unique:proveedor|size:11',
-            'razon_social' => 'string|max:150',
-            'email' => 'required|email',
+            'razon_social' => 'string|max:100',
             'rubro_proveedor_id' => 'required|exists:rubro_proveedor,id',
-            'descripcion' => 'required|alpha_dash|max:300',
+            'descripcion' => 'required|alpha_dash|max:255',
             'estado' => 'boolean'
         ]);
 
@@ -36,43 +36,6 @@ class ProveedorController extends Controller
     public function index()
     {
         return response()->json(Proveedor::all());
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function aprobarSolicitud(Request $request, Proveedor $proveedor)
-    {
-        if($proveedor->estado == 0) {
-            $proveedor->estado = 1;
-            $proveedor->save();
-
-            $user = $this->generarUsuario($proveedor);
-
-            UsuarioProveedor::create([
-                'usuario_id' => $user->id,
-                'proveedor_id' => $proveedor->id
-            ]);
-
-            return 'Nuevo usuario registrado';
-        }
-        return 'La solicitud del usuario ya fue aprobada';
-    }
-
-    private function generarUsuario($proveedor) {
-        $bytes = openssl_random_pseudo_bytes(6);
-        $pass = bin2hex($bytes);
-
-        $user = User::create([
-            'name' => $proveedor->razon_social,
-            'password' => $pass,
-            'tipo_usuario_id' => 2,
-        ]);
-
-        return $user;
     }
 
     /**

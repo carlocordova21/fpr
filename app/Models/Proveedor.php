@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\User;
 
 class Proveedor extends Model
 {
@@ -17,5 +18,8 @@ class Proveedor extends Model
         'rubro_proveedor_id', 
         'descripcion',
     ];
-    
+
+    public function user() {
+        return $this->belongsTo(User::class);
+    }
 }

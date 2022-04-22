@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
@@ -20,10 +21,12 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::apiResource('/users', UserController::class);
+Route::post('/enviar_solicitud/{user}', [ProveedorController::class, 'enviarSolicitud']);
+Route::put('/aprobar_solicitud/{proveedor}', [AdminController::class, 'aprobarSolicitud']);
+
+Route::post('/sanctum/token', [UserController::class, 'requestToken']);
+
 
 Route::get('/proveedores', [ProveedorController::class, 'index']);
-Route::post('/proveedor_solicitud', [ProveedorController::class, 'enviarSolicitud']);
-Route::put('/proveedor_aprobado/{proveedor}', [ProveedorController::class, 'aprobarSolicitud']);
 Route::delete('/proveedor/{proveedor}', [ProveedorController::class, 'destroy']);
 
