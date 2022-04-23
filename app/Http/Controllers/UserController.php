@@ -19,6 +19,12 @@ class UserController extends Controller
             'password' => 'required|string|min:8',
         ]);    
 
+        if (!Hash::check($request->email)) {
+            throw ValidationException::withMessages([
+                'email' => ['El email ingresado es erroneo o ya existe.'],
+            ]);
+        }
+
         $user = User::create([
             'name' => $validated['name'],
             'email' => $validated['email'],
