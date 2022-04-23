@@ -13,7 +13,7 @@ class UserController extends Controller
 {
     public function register(Request $request)
     {
-        $validator = Validator::make([
+        $validator = Validator::make($request->except('tipo_usuario_id'), [
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8',
@@ -23,8 +23,9 @@ class UserController extends Controller
             return response()->json($validator->errors());
         }
 
-        $validated = $validator->validate();    
+        $validated = $validator->validated();    
 
+        return $validated;
         $user = User::create([
             'name' => $validated['name'],
             'email' => $validated['email'],
