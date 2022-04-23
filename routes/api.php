@@ -16,9 +16,9 @@ use App\Http\Controllers\ProveedorController;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+Route::post('/register', [UserController::class, 'register']);
 
 Route::middleware('auth:sanctum')->group(function () {
-    Route::post('/register', [UserController::class, 'register']);
     Route::post('/login', [UserController::class, 'login']);
     Route::delete('/logout/{user}', [UserController::class, 'logout']);
 
