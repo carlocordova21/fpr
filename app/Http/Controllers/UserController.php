@@ -23,7 +23,7 @@ class UserController extends Controller
             return response()->json($validator->errors());
         }
 
-        $validated = $request->validate();    
+        $validated = $validator->validate();    
 
         $user = User::create([
             'name' => $validated['name'],
