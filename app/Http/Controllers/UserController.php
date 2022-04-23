@@ -18,7 +18,7 @@ class UserController extends Controller
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8',
         ]);    
-        
+
         $user = User::create([
             'name' => $validated['name'],
             'email' => $validated['email'],
@@ -26,11 +26,9 @@ class UserController extends Controller
             'tipo_usuario_id' => 3,
         ]);
 
-        $token = $user->createToken('auth_token')->plainTextToken;
-
         return response()->json([
-            'access_token' => $token,
-            'token_type' => 'Bearer',
+            'user' => $user,
+            'message' => 'El usuario ha sido registrado correctamente',
         ]);
     }
 
