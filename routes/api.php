@@ -17,16 +17,13 @@ use App\Http\Controllers\ProveedorController;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/enviar_solicitud/{user}', [ProveedorController::class, 'enviarSolicitud']);
+    Route::put('/aprobar_solicitud/{proveedor}', [AdminController::class, 'aprobarSolicitud']);
+    
+    Route::post('/sanctum/token', [UserController::class, 'requestToken']);
+    Route::delete('/proveedor/{proveedor}', [ProveedorController::class, 'destroy']);
 });
 
-Route::post('/enviar_solicitud/{user}', [ProveedorController::class, 'enviarSolicitud']);
-Route::put('/aprobar_solicitud/{proveedor}', [AdminController::class, 'aprobarSolicitud']);
-
-Route::post('/sanctum/token', [UserController::class, 'requestToken']);
-
-
 Route::get('/proveedores', [ProveedorController::class, 'index']);
-Route::delete('/proveedor/{proveedor}', [ProveedorController::class, 'destroy']);
 
