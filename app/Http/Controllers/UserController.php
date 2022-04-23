@@ -35,7 +35,7 @@ class UserController extends Controller
         ]);
     }
 
-    public function requestToken(Request $request): string
+    public function login(Request $request): string
     {
         $request->validate([
             'email' => 'required|email',
