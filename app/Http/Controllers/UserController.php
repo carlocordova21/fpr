@@ -13,17 +13,17 @@ class UserController extends Controller
 {
     public function register(Request $request)
     {
-        $validated = $request->validate([
+        $validator = Validator::make([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8',
-        ]);    
+        ]);
 
-        if (!Hash::check($request->email)) {
-            throw ValidationException::withMessages([
-                'email' => ['El email ingresado es erroneo o ya existe.'],
-            ]);
+        if($validator->fails()) {
+            return response()->json($validator->errors());
         }
+
+        $validated = $request->validate();    
 
         $user = User::create([
             'name' => $validated['name'],
