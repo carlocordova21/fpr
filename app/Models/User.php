@@ -47,4 +47,8 @@ class User extends Authenticatable
     public function proveedor() {
         return $this->hasOne(Proveedor::class);
     }
+
+    public function tipoUsuario() {
+        return $this->belongsTo(TipoUsuario::class);
+    }
 }

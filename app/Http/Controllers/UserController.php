@@ -63,9 +63,14 @@ class UserController extends Controller
         ]);
     }
 
-    public function logout(User $user)
+    public function logout(Request $request)
     {
-        $user->tokens()->delete();
+        $request->user()->currentAccessToken()->delete();
+
+        return response()->json([
+            'message' => 'Token de sesion actual eliminado',
+            'user' => $request->user(),
+        ]);
     }
 
     /**
