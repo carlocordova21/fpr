@@ -25,7 +25,6 @@ class UserController extends Controller
 
         $validated = $validator->validated();    
 
-        return $validated;
         $user = User::create([
             'name' => $validated['name'],
             'email' => $validated['email'],
@@ -44,7 +43,6 @@ class UserController extends Controller
         $request->validate([
             'email' => 'required|email',
             'password' => 'required',
-            'device_name' => 'required|string',
         ]);
 
         $user = User::where('email', $request->email)->first();
@@ -56,7 +54,7 @@ class UserController extends Controller
         }
 
         $user->tokens()->delete();
-        $token = $user->createToken($request->device_name)->plainTextToken;
+        $token = $user->createToken($request->email)->plainTextToken;
         return response()->json([
             'access_token' => $token,
             'token_type' => 'Bearer'

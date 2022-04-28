@@ -17,4 +17,9 @@ class AdminController extends Controller
         }
         return 'La solicitud del usuario ya fue aprobada';
     }
+
+    public function listarSolicitudes() {
+        return Proveedor::all();
+    }
+
 }

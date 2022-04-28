@@ -28,16 +28,17 @@ Route::middleware('auth:sanctum')->group(function () {
     });
     Route::delete('/logout', [UserController::class, 'logout']);
 
-    Route::post('/enviar_solicitud/{user}', [ProveedorController::class, 'enviarSolicitud']);
-    Route::put('/aprobar_solicitud/{proveedor}', [AdminController::class, 'aprobarSolicitud']);
-    
-    Route::delete('/proveedor/{proveedor}', [ProveedorController::class, 'destroy']);
+    Route::post('/enviar_solicitud', [ProveedorController::class, 'enviarSolicitud']);
     
     Route::middleware('admin')->group(function () {
-        Route::get('/pruebas', [PruebasController::class, 'prueba']);
+        Route::put('/aprobar_solicitud/{proveedor}', [AdminController::class, 'aprobarSolicitud']);
+        Route::get('/solicitudes', [AdminController::class, 'listarSolicitudes']);
+        Route::delete('/proveedor/{proveedor}', [ProveedorController::class, 'destroy']);
+        
     });
+    Route::get('/pruebas', [PruebasController::class, 'prueba']);
 });
 
-
 Route::get('/proveedores', [ProveedorController::class, 'index']);
+
 

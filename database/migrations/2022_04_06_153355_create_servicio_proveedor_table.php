@@ -17,9 +17,9 @@ class CreateServicioProveedorTable extends Migration
             $table->id();
             $table->unsignedBigInteger('proveedor_id');
             $table->string('descripcion')->unique();
-            $table->decimal('precio_base', 8, 2);
+            $table->decimal('precio_base', 6, 2);
             $table->string('descripcion_adicional');
-            $table->decimal('precio_adicional', 8, 2);
+            $table->decimal('precio_adicional', 6, 2);
             $table->timestamps();
 
             $table->foreign('proveedor_id')->references('id')->on('proveedor')->onDelete('cascade');

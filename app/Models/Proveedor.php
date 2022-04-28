@@ -22,4 +22,12 @@ class Proveedor extends Model
     public function user() {
         return $this->belongsTo(User::class);
     }
+
+    public function aprobados() {
+        return Proveedor::where('estado', 1);
+    }
+
+    public function pendientes() {
+        return Proveedor::where('estado', 0);
+    }
 }

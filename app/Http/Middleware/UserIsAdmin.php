@@ -18,9 +18,9 @@ class UserIsAdmin
      */
     public function handle(Request $request, Closure $next)
     {
-        if(Auth::check() && Auth::user()->tipoUsuario->id == 1) {
-            return $next($request);
+        if(!auth()->check() || !auth()->user()->tipoUsuario->id == 1) {
+            return abort(code: 403);
         }
-        return redirect('/');
+        return $next($request);
     }
 }

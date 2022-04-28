@@ -14,7 +14,7 @@ class UserFactory extends Factory
      */
     public function definition()
     {   
-        $tipos_usuario = \App\Models\TipoUsuario::pluck('id')->toArray();
+        $tipos_usuario = \App\Models\TipoUsuario::where('nombre', '<>', 'administrador')->pluck('id')->toArray();
         return [
             'name' => $this->faker->name(),
             'email' => $this->faker->unique()->safeEmail(),

@@ -6,17 +6,24 @@ use App\Models\Proveedor;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 class ProveedorController extends Controller
 {
-    public function enviarSolicitud(Request $request, User $user) {
+    public function enviarSolicitud(Request $request) {
         $validator = Validator::make(
-            array_merge($request->all(), ['user_id' => $user->id]), [
-            'user_id' => 'required|exists:users,id|unique:proveedor,user_id',
+            array_merge($request->all(), ['user_id' => auth()->user()->id]), [
+            'user_id' => [
+                'required',
+                Rule::exists('users', 'id')->where(function($query) {
+                    return $query->where('tipo_usuario_id', 3);
+                }),
+                'unique:proveedor,user_id',
+            ],
             'ruc' => 'required|unique:proveedor|size:11',
             'razon_social' => 'string|max:100',
             'rubro_proveedor_id' => 'required|exists:rubro_proveedor,id',
-            'descripcion' => 'required|alpha_dash|max:255',
+            'descripcion' => 'required|string|max:255',
             'estado' => 'boolean'
         ]);
 
