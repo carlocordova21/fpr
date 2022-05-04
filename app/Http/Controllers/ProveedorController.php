@@ -37,6 +37,10 @@ class ProveedorController extends Controller
         return response()->json(Proveedor::create($validated), 201);
     }
 
+    public function index() {
+        return Proveedor::paginate(10);
+    }
+
     /**
      * Display a listing of the resource.
      *

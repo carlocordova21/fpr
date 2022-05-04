@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProveedorController;
 use App\Http\Controllers\PruebasController;
+use App\Http\Controllers\ServicioProveedorController;
 
 /*
 |--------------------------------------------------------------------------
@@ -40,8 +41,12 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/pruebas', [PruebasController::class, 'prueba']);
 
 
+    Route::get('/proveedores', [ProveedorController::class, 'index']);
     Route::get('/proveedores/{rubro_proveedor_id}', [ProveedorController::class, 'listarPorRubro']);
     Route::get('/proveedor/{proveedor}', [ProveedorController::class, 'show']);
+
+    Route::get('/servicios', [ServicioProveedorController::class, 'index']);
+    Route::get('/servicio/{servicio}', [ServicioProveedorController::class, 'show']);
 });
 
 

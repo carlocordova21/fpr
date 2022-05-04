@@ -14,7 +14,7 @@ class ServicioProveedorController extends Controller
      */
     public function index()
     {
-        //
+        return ServicioProveedor::paginate(10);
     }
 
     /**
@@ -34,9 +34,11 @@ class ServicioProveedorController extends Controller
      * @param  \App\Models\ServicioProveedor  $servicioProveedor
      * @return \Illuminate\Http\Response
      */
-    public function show(ServicioProveedor $servicioProveedor)
+    public function show(ServicioProveedor $servicio)
     {
-        //
+        return response()->json([
+            'servicio' => $servicio
+        ]);
     }
 
     /**
