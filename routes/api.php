@@ -36,9 +36,13 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::delete('/proveedor/{proveedor}', [ProveedorController::class, 'destroy']);
         
     });
+    
     Route::get('/pruebas', [PruebasController::class, 'prueba']);
+
+
+    Route::get('/proveedores/{rubro_proveedor_id}', [ProveedorController::class, 'listarPorRubro']);
+    Route::get('/proveedor/{proveedor}', [ProveedorController::class, 'show']);
 });
 
-Route::get('/proveedores', [ProveedorController::class, 'index']);
 
 

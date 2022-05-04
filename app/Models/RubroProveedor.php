@@ -11,4 +11,8 @@ class RubroProveedor extends Model
     protected $table = 'rubro_proveedor';
     protected $fillable = ['nombre'];
     public $timestamps = false;
+
+    public function proveedores() {
+        return $this->hasMany(Proveedor::class);
+    }
 }

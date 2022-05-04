@@ -6,6 +6,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\User;
+use App\Models\RubroProveedor;
 
 class Proveedor extends Model
 {
@@ -29,5 +30,9 @@ class Proveedor extends Model
 
     public function pendientes() {
         return Proveedor::where('estado', 0);
+    }
+
+    public function rubro() {
+        return $this->belongsTo(RubroProveedor::class, 'rubro_proveedor_id');
     }
 }

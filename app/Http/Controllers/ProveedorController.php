@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\ProveedorCollection;
 use App\Models\Proveedor;
+use App\Models\RubroProveedor;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -40,9 +42,9 @@ class ProveedorController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function listarPorRubro($rubro_proveedor_id)
     {
-        return response()->json(Proveedor::all());
+        return new ProveedorCollection(Proveedor::where('rubro_proveedor_id', $rubro_proveedor_id)->paginate(10));
     }
 
     /**
@@ -53,7 +55,9 @@ class ProveedorController extends Controller
      */
     public function show(Proveedor $proveedor)
     {
-        //
+        return response()->json([
+            'proveedor' => $proveedor
+        ]);
     }
 
     /**

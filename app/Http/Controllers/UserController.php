@@ -7,6 +7,7 @@ use App\Models\Proveedor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
+use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Validation\ValidationException;
 
 class UserController extends Controller
@@ -38,7 +39,7 @@ class UserController extends Controller
         ]);
     }
 
-    public function login(Request $request): string
+    public function login(Request $request)
     {
         $request->validate([
             'email' => 'required|email',
@@ -58,7 +59,7 @@ class UserController extends Controller
         return response()->json([
             'access_token' => $token,
             'token_type' => 'Bearer'
-        ]);
+        ], Response::HTTP_OK);
     }
 
     public function logout(Request $request)

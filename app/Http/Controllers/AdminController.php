@@ -19,7 +19,6 @@ class AdminController extends Controller
     }
 
     public function listarSolicitudes() {
-        return Proveedor::all();
+        return Proveedor::all()->paginate(15);
     }
-
 }
