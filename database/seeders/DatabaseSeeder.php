@@ -32,10 +32,11 @@ class DatabaseSeeder extends Seeder
         \App\Models\User::factory(40)->create();
 
         \App\Models\RubroProveedor::insert([
-            ['nombre' => 'salud'],
-            ['nombre' => 'tecnología'],
-            ['nombre' => 'educación'],
-            ['nombre' => 'diseño'],
+            ['nombre' => 'salud', 'url_img_rubro' => 'https://owh-wh-d9-prod.s3.amazonaws.com/s3fs-public/blog-images/CatchUptoGetAheadTheRoleofHealthcareProvidersinGettingChildrenUptoDateonVaccines.png'],
+            ['nombre' => 'tecnología', 'url_img_rubro' => 'https://gestion.pe/resizer/40rS0mSTdklFrN_rwBFxk6frRjE=/980x0/smart/filters:format(jpeg):quality(75)/cloudfront-us-east-1.images.arcpublishing.com/elcomercio/TBIWSBPRTBHXZPX5UJI7YP2Y6M.jpg'],
+            ['nombre' => 'educación', 'url_img_rubro' => 'https://images.theconversation.com/files/421302/original/file-20210915-17-1dhh4oe.jpg?ixlib=rb-1.1.0&q=45&auto=format&w=1200&h=1200.0&fit=crop'],
+            ['nombre' => 'diseño', 'url_img_rubro' => 'https://www.senati.edu.pe/sites/default/files/2017/carrera/11/carrera-dual-diseno-grafico-senati-1800x1190.jpg
+            '],
         ]);
 
         \App\Models\Proveedor::factory(20)->create();

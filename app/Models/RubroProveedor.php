@@ -9,7 +9,7 @@ class RubroProveedor extends Model
 {
     use HasFactory;
     protected $table = 'rubro_proveedor';
-    protected $fillable = ['nombre'];
+    protected $fillable = ['nombre', 'url_img_rubro'];
     public $timestamps = false;
 
     public function proveedores() {

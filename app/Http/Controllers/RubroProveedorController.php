@@ -14,7 +14,7 @@ class RubroProveedorController extends Controller
      */
     public function index()
     {
-        //
+        return RubroProveedor::all();
     }
 
     /**
@@ -34,9 +34,11 @@ class RubroProveedorController extends Controller
      * @param  \App\Models\RubroProveedor  $rubroProveedor
      * @return \Illuminate\Http\Response
      */
-    public function show(RubroProveedor $rubroProveedor)
+    public function show(RubroProveedor $rubro)
     {
-        //
+        return response()->json([
+            'rubro' => $rubro
+        ]);
     }
 
     /**
