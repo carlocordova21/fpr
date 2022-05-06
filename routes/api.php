@@ -40,7 +40,6 @@ Route::middleware('auth:sanctum')->group(function () {
     
     Route::get('/pruebas', [PruebasController::class, 'prueba']);
 
-
     Route::get('/proveedores', [ProveedorController::class, 'index']);
     Route::get('/proveedores/{rubro_proveedor_id}', [ProveedorController::class, 'listarPorRubro']);
     Route::get('/proveedor/{proveedor}', [ProveedorController::class, 'show']);

@@ -20,6 +20,7 @@ class ServicioProveedorFactory extends Factory
             'precio_base' => $this->faker->randomFloat(2, 20, 1000),
             'descripcion_adicional' => $this->faker->text(),
             'precio_adicional' => $this->faker->randomFloat(2, 20, 500),
+            'url_img_servicio' => $this->faker->imageUrl(480, 480,'Servicio', true),
         ];
     }
 }

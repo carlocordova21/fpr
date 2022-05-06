@@ -20,6 +20,7 @@ class CreateProveedorTable extends Migration
             $table->string('razon_social');
             $table->unsignedBigInteger('rubro_proveedor_id');
             $table->text('descripcion')->nullable();
+            $table->string('url_img_proveedor')->default('https://img.freepik.com/vector-gratis/infografia-perfil-cliente_52683-9740.jpg?w=826&t=st=1651794919~exp=1651795519~hmac=5ad183e034dd0b0065807c7f1d790176c0cdb730c7ce301ad6dfc92bb202efae');
             $table->boolean('estado')->default(0);
             $table->timestamps();
 
