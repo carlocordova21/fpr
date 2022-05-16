@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\ProveedorCollection;
+use App\Http\Resources\ProveedorResource;
 use App\Models\Proveedor;
 use App\Models\RubroProveedor;
 use App\Models\User;
@@ -14,20 +14,22 @@ class ProveedorController extends Controller
 {
     public function enviarSolicitud(Request $request) {
         $validator = Validator::make(
-            array_merge($request->all(), ['user_id' => auth()->user()->id]), [
-            'user_id' => [
-                'required',
-                Rule::exists('users', 'id')->where(function($query) {
-                    return $query->where('tipo_usuario_id', 3);
-                }),
-                'unique:proveedor,user_id',
-            ],
-            'ruc' => 'required|unique:proveedor|size:11',
-            'razon_social' => 'string|max:100',
-            'rubro_proveedor_id' => 'required|exists:rubro_proveedor,id',
-            'descripcion' => 'required|string|max:255',
-            'estado' => 'boolean'
-        ]);
+            array_merge($request->all(), ['user_id' => auth()->user()->id]), 
+            [
+                'user_id' => [
+                    'required',
+                    Rule::exists('users', 'id')->where(function($query) {
+                        return $query->where('tipo_usuario_id', 3);
+                    }),
+                    'unique:proveedor,user_id',
+                ],
+                'ruc' => 'required|unique:proveedor|size:11',
+                'razon_social' => 'string|max:100',
+                'rubro_proveedor_id' => 'required|exists:rubro_proveedor,id',
+                'descripcion' => 'required|string|max:255',
+                'estado' => 'boolean'
+            ]
+        );
 
         if($validator->fails()) {
             return response()->json($validator->errors());
@@ -38,7 +40,7 @@ class ProveedorController extends Controller
     }
 
     public function index() {
-        return Proveedor::paginate(10);
+        return ProveedorResource::collection(Proveedor::paginate(10));
     }
 
     /**
@@ -48,7 +50,7 @@ class ProveedorController extends Controller
      */
     public function listarPorRubro($rubro_proveedor_id)
     {
-        return new ProveedorCollection(Proveedor::where('rubro_proveedor_id', $rubro_proveedor_id)->paginate(10));
+        return ProveedorResource::collection(Proveedor::where('rubro_proveedor_id', $rubro_proveedor_id)->paginate(10));
     }
 
     /**
@@ -59,9 +61,7 @@ class ProveedorController extends Controller
      */
     public function show(Proveedor $proveedor)
     {
-        return response()->json([
-            'proveedor' => $proveedor
-        ]);
+        return new ProveedorResource($proveedor);
     }
 
     /**
@@ -73,7 +73,23 @@ class ProveedorController extends Controller
      */
     public function update(Request $request, Proveedor $proveedor)
     {
-        //
+        $validator = Validator::make(
+            $request->only(['descripcion']), 
+            ['descripcion' => 'required|string|max:255']
+        );
+
+        if($validator->fails()) {
+            return response()->json($validator->errors());
+        }
+
+        $validated = $validator->validated();
+
+        $res = $proveedor->update($validated);
+
+        if($res) {
+            return response()->json(['message' => 'Proveedor actualizado correctamente']);
+        }
+        return response()->json(['message' => 'Error para actualizar el proveedor'], 500);
     }
 
     /**
@@ -84,6 +100,16 @@ class ProveedorController extends Controller
      */
     public function destroy(Proveedor $proveedor)
     {
-        //
+        if($proveedor->estado == 1) {
+            $proveedor->estado = 0;
+            $res = $proveedor->save();
+            return response()->json(['message' => 'Proveedor Deshabilitado']);
+
+            if($res) {
+                return response()->json(['message' => 'Error para actualizar el proveedor'], 500);
+            }
+        }
+
+        return response()->json(['message' => 'El proveedor ya se encuentra deshabilitado']);
     }
 }

@@ -31,26 +31,32 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/logout', [UserController::class, 'logout']);
 
     Route::post('/enviar_solicitud', [ProveedorController::class, 'enviarSolicitud']);
-    
+    Route::put('/proveedor/{proveedor}', [ProveedorController::class, 'update']);
+
     Route::middleware('admin')->group(function () {
         Route::put('/aprobar_solicitud/{proveedor}', [AdminController::class, 'aprobarSolicitud']);
-        Route::get('/solicitudes', [AdminController::class, 'listarSolicitudes']);
+        Route::get('/solicitudes', [AdminController::class, 'solicitudesPendientes']);
         Route::delete('/proveedor/{proveedor}', [ProveedorController::class, 'destroy']);
-        
+
+        Route::middleware('provider')->group(function () {
+            Route::post('/servicio', [ServicioProveedorController::class, 'store']);
+        });
     });
-    
-    Route::get('/pruebas', [PruebasController::class, 'prueba']);
 
-    Route::get('/proveedores', [ProveedorController::class, 'index']);
-    Route::get('/proveedores/{rubro_proveedor_id}', [ProveedorController::class, 'listarPorRubro']);
-    Route::get('/proveedor/{proveedor}', [ProveedorController::class, 'show']);
-    
-    Route::get('/rubros', [RubroProveedorController::class, 'index']);
-    Route::get('/rubro/{rubro}', [RubroProveedorController::class, 'show']);
-
-    Route::get('/servicios', [ServicioProveedorController::class, 'index']);
-    Route::get('/servicio/{servicio}', [ServicioProveedorController::class, 'show']);
 });
 
+Route::get('/proveedores', [ProveedorController::class, 'index']);
+Route::get('/proveedores/{rubro_proveedor_id}', [ProveedorController::class, 'listarPorRubro']);
+Route::get('/proveedor/{proveedor}', [ProveedorController::class, 'show']);
+
+Route::get('/rubros', [RubroProveedorController::class, 'index']);
+Route::get('/rubro/{rubro}', [RubroProveedorController::class, 'show']);
+
+Route::get('/servicios', [ServicioProveedorController::class, 'index']);
+Route::get('/servicios/{proveedor_id}', [ServicioProveedorController::class, 'listarPorProveedor']);
+Route::get('/servicio/{servicio}', [ServicioProveedorController::class, 'show']);
+
+
+Route::get('/pruebas', [PruebasController::class, 'prueba']);
 
 

@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\ServicioProveedorResource;
 use App\Models\ServicioProveedor;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class ServicioProveedorController extends Controller
 {
@@ -14,7 +16,7 @@ class ServicioProveedorController extends Controller
      */
     public function index()
     {
-        return ServicioProveedor::paginate(10);
+        return ServicioProveedorResource::collection(ServicioProveedor::paginate(10));
     }
 
     /**
@@ -25,7 +27,28 @@ class ServicioProveedorController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validator = Validator::make(
+            $request->all(), 
+            [
+                'proveedor_id' => 'required|exists:proveedor,id',
+                'descripcion' => 'required|string|max:255',
+                'precio_base' => 'string|max:100',
+                'descripcion_adicional' => 'required|string|max:255',
+                'precio_adicional' => 'required|string|max:255',
+                'url_img_servicio' => 'boolean'
+            ]
+        );
+
+        if($validator->fails()) {
+            return response()->json($validator->errors());
+        }
+
+        $validated = $validator->validated();
+        return response()->json(ServicioProveedor::create($validated), 201);
+    }
+
+    public function listarPorProveedor($proveedor_id) {
+        return ServicioProveedorResource::collection(ServicioProveedor::where('proveedor_id', $proveedor_id)->paginate(10));
     }
 
     /**
@@ -36,9 +59,7 @@ class ServicioProveedorController extends Controller
      */
     public function show(ServicioProveedor $servicio)
     {
-        return response()->json([
-            'servicio' => $servicio
-        ]);
+        return new ServicioProveedorResource($servicio);
     }
 
     /**

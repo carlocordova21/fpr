@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\ProveedorResource;
 use App\Models\Proveedor;
 use Illuminate\Http\Request;
 
@@ -18,7 +19,7 @@ class AdminController extends Controller
         return 'La solicitud del usuario ya fue aprobada';
     }
 
-    public function listarSolicitudes() {
-        return Proveedor::all()->paginate(15);
+    public function solicitudesPendientes() {
+        return ProveedorResource::collection(Proveedor::where('estado', 0)->paginate(15));
     }
 }
