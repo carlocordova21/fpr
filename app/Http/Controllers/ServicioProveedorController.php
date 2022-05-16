@@ -89,52 +89,42 @@ class ServicioProveedorController extends Controller
      * @param  \App\Models\ServicioProveedor  $servicioProveedor
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, ServicioProveedor $servicioProveedor)
+    public function update(Request $request, ServicioProveedor $servicio)
     {
-        // $proveedor = Proveedor::where('user_id', auth()->user()->id)
-        //             ->where('estado', 1)
-        //             ->get();
+        $validator = Validator::make(
+            $request->except(['id', 'proveedor_id']),
+            [
+                'descripcion' => 'required|string|max:255',
+                'precio_base' => 'required|between:0,9999.99',
+                'descripcion_adicional' => 'string|max:255',
+                'precio_adicional' => 'between:0,9999.99',
+                'url_img_servicio' => 'required|url'
+            ]
+        );
 
-        // if (empty($proveedor)) {
-        //     $validator = Validator::make(
-        //         $request->except(['id', 'proveedor_id']),
-        //         [
-        //             'descripcion' => 'required|string|max:255',
-        //             'precio_base' => 'required|between:0,9999.99',
-        //             'descripcion_adicional' => 'string|max:255',
-        //             'precio_adicional' => 'between:0,9999.99',
-        //             'url_img_servicio' => 'required|url'
-        //         ]
-        //     );
+        if ($validator->fails()) {
+            return response()->json($validator->errors());
+        }
 
-        //     if ($validator->fails()) {
-        //         return response()->json($validator->errors());
-        //     }
+        $validated = $validator->validated();
 
-        //     $validated = $validator->validated();
-        //     return $validated;
-        //     return response()->json(ServicioProveedor::create($validated), 200);
-        // }
+        $res = $servicio->update($validated);
 
-        // if ($proveedor->estado == 0) {
-        //     return response()->json([
-        //         'message' => 'El usuario actual no esta habilitado como proveedor'
-        //     ]);
-        // }
-
-        // return response()->json([
-        //     'message' => 'El usuario actual no es proveedor'
-        // ]);
+        if($res) {
+            return response()->json(['message' => 'Servicio actualizado correctamente']);
+        }
+        return response()->json(['message' => 'Error para actualizar el servicio'], 500);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\ServicioProveedor  $servicioProveedor
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(ServicioProveedor $servicioProveedor)
+    public function cambiarEstado(ServicioProveedor $servicio)
     {
-        //
+        $servicio->estado = !$servicio->estado;
+        $servicio->save();
+        
+        if($servicio->estado) {
+            return response()->json(['message' => 'El servicio ha sido habilitado']);
+        }
+
+        return response()->json(['message' => 'Servicio deshabilitado']);
     }
 }

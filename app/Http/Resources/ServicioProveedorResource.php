@@ -23,6 +23,7 @@ class ServicioProveedorResource extends JsonResource
             'descripcion_adicional' => $this->descripcion_adicional,
             'precio_adicional' => $this->precio_adicional,
             'url_img_servicio' => $this->url_img_servicio,
+            'estado' => $this->estado,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];

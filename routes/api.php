@@ -37,9 +37,11 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::put('/aprobar_solicitud/{proveedor}', [AdminController::class, 'aprobarSolicitud']);
         Route::get('/solicitudes', [AdminController::class, 'solicitudesPendientes']);
         Route::delete('/proveedor/{proveedor}', [ProveedorController::class, 'destroy']);
-
+        
         Route::middleware('provider')->group(function () {
             Route::post('/servicio', [ServicioProveedorController::class, 'store']);
+            Route::put('/servicio/{servicio}', [ServicioProveedorController::class, 'update']);
+            Route::put('/estado/servicio/{servicio}', [ServicioProveedorController::class, 'cambiarEstado']);
         });
     });
 

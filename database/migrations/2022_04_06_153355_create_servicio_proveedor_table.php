@@ -22,6 +22,7 @@ class CreateServicioProveedorTable extends Migration
             $table->decimal('precio_adicional', 6, 2);
             $table->string('url_img_servicio')->default('https://elinsignia.com/wp-content/uploads/2017/10/calidad-servicio-al-cliente.jpg');
             $table->timestamps();
+            $table->boolean('estado')->default(1);
 
             $table->foreign('proveedor_id')->references('id')->on('proveedor')->onDelete('cascade');
         });
