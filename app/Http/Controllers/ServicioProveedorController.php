@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\ServicioProveedorResource;
+use App\Models\Proveedor;
 use App\Models\ServicioProveedor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -27,27 +28,46 @@ class ServicioProveedorController extends Controller
      */
     public function store(Request $request)
     {
-        $validator = Validator::make(
-            $request->all(), 
-            [
-                'proveedor_id' => 'required|exists:proveedor,id',
-                'descripcion' => 'required|string|max:255',
-                'precio_base' => 'string|max:100',
-                'descripcion_adicional' => 'required|string|max:255',
-                'precio_adicional' => 'required|string|max:255',
-                'url_img_servicio' => 'boolean'
-            ]
-        );
+        $proveedor = Proveedor::where('user_id', auth()->user()->id)
+                    ->where('estado', 1)
+                    ->get();
 
-        if($validator->fails()) {
-            return response()->json($validator->errors());
+        if (empty($proveedor)) {
+            $validator = Validator::make(
+                array_merge($request->except(['proveedor_id']), ['proveedor_id' => $proveedor->id]),
+                [
+                    'proveedor_id' => 'required|exists:proveedor,id',
+                    'descripcion' => 'required|string|max:255',
+                    'precio_base' => 'required|between:0,9999.99',
+                    'descripcion_adicional' => 'string|max:255',
+                    'precio_adicional' => 'between:0,9999.99',
+                    'url_img_servicio' => 'required|url'
+                ]
+            );
+
+            if ($validator->fails()) {
+                return response()->json($validator->errors());
+            }
+
+            $validated = $validator->validated();
+            return response()->json(ServicioProveedor::create($validated), 201);
         }
 
-        $validated = $validator->validated();
-        return response()->json(ServicioProveedor::create($validated), 201);
+        if(isset($proveedor->estado)) {
+            if ($proveedor->estado == 0) {
+                return response()->json([
+                    'message' => 'El usuario actual no esta habilitado como proveedor'
+                ]);
+            }
+        }
+
+        return response()->json([
+            'message' => 'El usuario actual no es proveedor'
+        ]);
     }
 
-    public function listarPorProveedor($proveedor_id) {
+    public function listarPorProveedor($proveedor_id)
+    {
         return ServicioProveedorResource::collection(ServicioProveedor::where('proveedor_id', $proveedor_id)->paginate(10));
     }
 
@@ -71,7 +91,40 @@ class ServicioProveedorController extends Controller
      */
     public function update(Request $request, ServicioProveedor $servicioProveedor)
     {
-        //
+        // $proveedor = Proveedor::where('user_id', auth()->user()->id)
+        //             ->where('estado', 1)
+        //             ->get();
+
+        // if (empty($proveedor)) {
+        //     $validator = Validator::make(
+        //         $request->except(['id', 'proveedor_id']),
+        //         [
+        //             'descripcion' => 'required|string|max:255',
+        //             'precio_base' => 'required|between:0,9999.99',
+        //             'descripcion_adicional' => 'string|max:255',
+        //             'precio_adicional' => 'between:0,9999.99',
+        //             'url_img_servicio' => 'required|url'
+        //         ]
+        //     );
+
+        //     if ($validator->fails()) {
+        //         return response()->json($validator->errors());
+        //     }
+
+        //     $validated = $validator->validated();
+        //     return $validated;
+        //     return response()->json(ServicioProveedor::create($validated), 200);
+        // }
+
+        // if ($proveedor->estado == 0) {
+        //     return response()->json([
+        //         'message' => 'El usuario actual no esta habilitado como proveedor'
+        //     ]);
+        // }
+
+        // return response()->json([
+        //     'message' => 'El usuario actual no es proveedor'
+        // ]);
     }
 
     /**
